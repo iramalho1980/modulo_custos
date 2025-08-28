@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Interativo - Módulo Custos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Ubuntu', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .header h1 {
+            font-weight: 600;
+            font-size: 2.5rem;
+            color: #ffffff;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .header .highlight {
+            color: #4ade80;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-weight: 300;
+            font-size: 1.1rem;
+            color: #b0b0b0;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            color: #e0e0e0;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-btn:hover {
+            background: rgba(74, 222, 128, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 222, 128, 0.4);
+        }
+
+        .section {
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .section:nth-child(2) { animation-delay: 0.1s; }
+        .section:nth-child(3) { animation-delay: 0.2s; }
+        .section:nth-child(4) { animation-delay: 0.3s; }
+        .section:nth-child(5) { animation-delay: 0.4s; }
+        .section:nth-child(6) { animation-delay: 0.5s; }
+        .section:nth-child(7) { animation-delay: 0.6s; }
+
+        .section-title {
+            font-weight: 600;
+            font-size: 1.8rem;
+            color: #ffffff;
+            margin-bottom: 20px;
+            padding: 15px 25px;
+            background: rgba(74, 222, 128, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border-left: 5px solid #4ade80;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .glass-card:hover::before {
+            left: 100%;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            border-color: rgba(74, 222, 128, 0.3);
+        }
+
+        .checklist {
+            list-style: none;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .checklist li:hover {
+            background: rgba(74, 222, 128, 0.1);
+            transform: translateX(5px);
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #4ade80;
+            border-radius: 4px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox.checked {
+            background: #4ade80;
+            color: white;
+        }
+
+        .checkbox.checked::after {
+            content: '✓';
+            font-weight: bold;
+        }
+
+        .step-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .step-card:hover {
+            background: rgba(74, 222, 128, 0.1);
+            transform: scale(1.02);
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: #4ade80;
+            color: #1a1a1a;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: 600;
+            margin-right: 15px;
+        }
+
+        .step-text {
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        .highlight-text {
+            background: linear-gradient(120deg, #4ade80 0%, #22c55e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 600;
+        }
+
+        .action-button {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #1a1a1a;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(74, 222, 128, 0.3);
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(74, 222, 128, 0.4);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4ade80, #22c55e);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 3px;
+        }
+
+        .floating-menu {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+
+        .floating-menu a {
+            display: block;
+            width: 12px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .floating-menu a.active,
+        .floating-menu a:hover {
+            background: #4ade80;
+            transform: scale(1.5);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .floating-menu {
+                display: none;
+            }
+        }
+
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-menu">
+        <a href="#parametros" data-section="parametros"></a>
+        <a href="#controle" data-section="controle"></a>
+        <a href="#envio" data-section="envio"></a>
+        <a href="#modelo" data-section="modelo"></a>
+        <a href="#calculo" data-section="calculo"></a>
+        <a href="#dashboard" data-section="dashboard"></a>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <h1>MANUAL INTERATIVO | <span class="highlight">MÓDULO CUSTOS</span></h1>
+            <p>Módulo para controle dos custos do escritório com base em informações extraídas dos módulos do sistema.</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </header>
+
+        <nav class="navigation">
+            <a href="#parametros" class="nav-btn">Parâmetros Iniciais</a>
+            <a href="#controle" class="nav-btn">Controle de Custos</a>
+            <a href="#envio" class="nav-btn">Envio de Itens</a>
+            <a href="#modelo" class="nav-btn">Modelo de Cálculo</a>
+            <a href="#calculo" class="nav-btn">Calcular Custos</a>
+            <a href="#dashboard" class="nav-btn">Dashboard</a>
+        </nav>
+
+        <section id="parametros" class="section">
+            <h2 class="section-title">📋 Parâmetros Iniciais</h2>
+            <div class="glass-card">
+                <p style="margin-bottom: 20px; font-weight: 400;">Antes de utilizar o módulo de custos, verifique os seguintes itens:</p>
+                <ul class="checklist">
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox"></div>
+                        <span>Verificar se usuário já está cadastrado no <span class="highlight-text">Onvio gestão</span></span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox"></div>
+                        <span>Verificar se usuário está cadastrado no <span class="highlight-text">sistema</span></span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox"></div>
+                        <span>Verificar se o usuário Onvio está <span class="highlight-text">vinculado</span> ao usuário do sistema</span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox"></div>
+                        <span>Verificar se está ativo <span class="highlight-text">agente de comunicações</span></span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox"></div>
+                        <span>Verificar em <span class="highlight-text">//controle/empresas</span>, botão [ módulos ] na empresa do escritório, na aba //Onvio se está selecionada a opção <span class="highlight-text">Custos</span></span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="controle" class="section">
+            <h2 class="section-title">💰 Itens para Controle de Custos</h2>
+            <div class="glass-card">
+                <p style="margin-bottom: 20px; font-weight: 400;">Variáveis que vão buscar os valores de dentro dos módulos para cálculo dos custos do escritório:</p>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">1</span>
+                    <span class="step-text">Acesse <span class="highlight-text">//ARQUIVOS/ITENS PARA CONTROLE DE CUSTOS</span></span>
+                </div>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">2</span>
+                    <span class="step-text">Já vem com várias opções <span class="highlight-text">pré cadastradas</span></span>
+                </div>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">3</span>
+                    <span class="step-text">Clique em <button class="action-button" style="font-size: 0.9rem; padding: 8px 16px;">[ novo ]</button></span>
+                </div>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">4</span>
+                    <span class="step-text">Marcar se vai lançar os valores com base nas <span class="highlight-text">contas contábeis</span> ou nas <span class="highlight-text">rubricas</span></span>
+                </div>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">5</span>
+                    <span class="step-text">Configurar demais campos</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="envio" class="section">
+            <h2 class="section-title">📤 Enviando Item Cadastrado para o Módulo Custos</h2>
+            <div class="glass-card">
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">1</span>
+                    <span class="step-text">Acesse <span class="highlight-text">//PROCESSOS/CUSTOS DO ESCRITÓRIO</span></span>
+                </div>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">2</span>
+                    <span class="step-text">Informe a <span class="highlight-text tooltip" data-tooltip="Mês/Ano de referência">competência</span></span>
+                </div>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">3</span>
+                    <span class="step-text">Clique em <button class="action-button" style="font-size: 0.9rem; padding: 8px 16px;">[ Processar ]</button></span>
+                </div>
+            </div>
+        </section>
+
+        <section id="modelo" class="section">
+            <h2 class="section-title">🔧 Criar Modelo de Cálculo de Custos</h2>
+            <div class="glass-card">
+                <p style="margin-bottom: 20px; font-weight: 400;">Acesse <span class="highlight-text">Onvio Gestão</span> → <span class="highlight-text">//Configuração/Cálculo de custos</span></p>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">1</span>
+                    <span class="step-text">Clique em <button class="action-button" style="font-size: 0.9rem; padding: 8px 16px;">[ adicionar ]</button></span>
+                </div>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">2</span>
+                    <span class="step-text">Definir <span class="highlight-text">nome</span></span>
+                </div>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">3</span>
+                    <span class="step-text">Clicar na guia <span class="highlight-text">"planilha"</span> e em seguida, <span class="highlight-text">"inserir coluna"</span></span>
+                </div>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">4</span>
+                    <span class="step-text">Inserir a coluna <span class="highlight-text">"Custos"</span>
+                        <ul style="margin-top: 10px; margin-left: 20px;">
+                            <li>Classificação da coluna = <span class="highlight-text">custos</span></li>
+                            <li>Tipo de resultado = <span class="highlight-text">valor</span></li>
+                        </ul>
+                    </span>
+                </div>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">5</span>
+                    <span class="step-text">Clicar em <span class="highlight-text">[ Dados do Escritório ]</span></span>
+                </div>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">6</span>
+                    <span class="step-text">Adicionar as variáveis: <span class="highlight-text">folha mensal + inss + fgts</span></span>
+                </div>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">7</span>
+                    <span class="step-text">Inserir a coluna <span class="highlight-text">"Faturamento"</span>
+                        <ul style="margin-top: 10px; margin-left: 20px;">
+                            <li>Classificação da coluna = <span class="highlight-text">receita</span></li>
+                            <li>Tipo do resultado = <span class="highlight-text">valor</span></li>
+                        </ul>
+                    </span>
+                </div>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">8</span>
+                    <span class="step-text">Clicar em <span class="highlight-text">[ dados do cliente ]</span></span>
+                </div>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">9</span>
+                    <span class="step-text">Inserir <span class="highlight-text">"valor do contrato + valor desconto cliente"</span>...salvar</span>
+                </div>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">10</span>
+                    <span class="step-text">Inserir a coluna <span class="highlight-text">"Resultado"</span>
+                        <ul style="margin-top: 10px; margin-left: 20px;">
+                            <li>Classificação da coluna = <span class="highlight-text">resultado final</span></li>
+                            <li>Tipo do resultado = <span class="highlight-text">valor</span></li>
+                        </ul>
+                    </span>
+                </div>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">11</span>
+                    <span class="step-text">Clicar em <span class="highlight-text">[ colunas ]</span></span>
+                </div>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">12</span>
+                    <span class="step-text">Inserir os operadores = <span class="highlight-text">custo – faturamento</span>...salvar</span>
+                </div>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">13</span>
+                    <span class="step-text">Clicar no botão <span class="highlight-text">[ clientes ]</span></span>
+                </div>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">14</span>
+                    <span class="step-text">Adicionar clientes que farão parte deste cálculo</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="calculo" class="section">
+            <h2 class="section-title">🧮 Calculando os Custos</h2>
+            <div class="glass-card">
+                <p style="margin-bottom: 20px; font-weight: 400;">Acesse <span class="highlight-text">//CUSTOS/CALCULAR CUSTOS</span></p>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">1</span>
+                    <span class="step-text">Selecionar o <span class="highlight-text">modelo de cálculo criado</span></span>
+                </div>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">2</span>
+                    <span class="step-text">Informe a <span class="highlight-text tooltip" data-tooltip="Mês/Ano de referência">competência</span></span>
+                </div>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">3</span>
+                    <span class="step-text">Clique em <button class="action-button" style="font-size: 0.9rem; padding: 8px 16px;">[ calcular ]</button></span>
+                </div>
+            </div>
+        </section>
+
+        <section id="dashboard" class="section">
+            <h2 class="section-title">📊 Visualizar Cálculos dos Custos</h2>
+            <div class="glass-card">
+                <p style="margin-bottom: 20px; font-weight: 400;">Acesse <span class="highlight-text">//CUSTOS/DASHBOARD</span></p>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">1</span>
+                    <span class="step-text">Selecione o <span class="highlight-text">modelo de cálculo</span></span>
+                </div>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">2</span>
+                    <span class="step-text">Informe a <span class="highlight-text tooltip" data-tooltip="Mês/Ano de referência">competência</span></span>
+                </div>
+                
+                <div class="step-card" onclick="expandStep(this)">
+                    <span class="step-number">3</span>
+                    <span class="step-text">Clique em <button class="action-button" style="font-size: 0.9rem; padding: 8px 16px;">[ Atualizar ]</button></span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Toggle checkbox function
+        function toggleCheck(item) {
+            const checkbox = item.querySelector('.checkbox');
+            checkbox.classList.toggle('checked');
+            updateProgress();
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('.checkbox');
+            const checkedBoxes = document.querySelectorAll('.checkbox.checked');
+            const progress = (checkedBoxes.length / checkboxes.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        // Expand step function
+        function expandStep(step) {
+            step.style.transform = 'scale(1.05)';
+            step.style.background = 'rgba(243, 156, 18, 0.2)';
+            
+            setTimeout(() => {
+                step.style.transform = 'scale(1.02)';
+                step.style.background = 'rgba(243, 156, 18, 0.1)';
+            }, 200);
+        }
+
+        // Update floating menu
+        function updateFloatingMenu() {
+            const sections = document.querySelectorAll('.section');
+            const menuItems = document.querySelectorAll('.floating-menu a');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            menuItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('data-section') === current) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // Scroll event listener
+        window.addEventListener('scroll', updateFloatingMenu);
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateFloatingMenu();
+            
+            // Add entrance animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            document.querySelectorAll('.section').forEach(section => {
+                observer.observe(section);
+            });
+        });
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                const sections = document.querySelectorAll('.section');
+                const current = document.querySelector('.floating-menu a.active');
+                if (current) {
+                    const currentIndex = Array.from(document.querySelectorAll('.floating-menu a')).indexOf(current);
+                    let nextIndex;
+                    
+                    if (e.key === 'ArrowDown') {
+                        nextIndex = (currentIndex + 1) % sections.length;
+                    } else {
+                        nextIndex = (currentIndex - 1 + sections.length) % sections.length;
+                    }
+                    
+                    sections[nextIndex].scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
